@@ -60,9 +60,10 @@ git clonehttps://github.com/alejandrovalencias/laravel-talen.git
 
 ## Nota
 
-- Las apis de consulta de la entidad ProgramParticipants no funcionan solo los metodos GET, el guardar, eliminar y actualizar funcionan de forma correcta
-- También se agrega archivo de insomnia para que sea importado y cargue todos los metodos de las entiades
+- Las apis de consulta de la entidad ProgramParticipants no funcionan los metodos GET, el guardar, eliminar y actualizar funcionan de forma correcta
+- También se agrega archivo de insomnia para que sea importado y cargue todos los metodos de las entidades
 
 * Insomnia es un programa para consumir Apis Rest
-
   - [Insomnia metodos de las apis](https://drive.google.com/file/d/1m2FKaaA2wZ9J2DLZ6nTn3t-R64uXn-eg/view)
+    
+- En el repositorio https://github.com/alejandrovalencias/talen-gpt esta el llenado de las entidades usando la api de Chat GPT
