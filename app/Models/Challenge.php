@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Challenge extends Model
 {
@@ -16,9 +16,24 @@ class Challenge extends Model
         'user_id',
     ];
 
-    public function user()
+    public static function rules($id = null)
     {
-        return $this->belongsTo(User::class);
+        $rules = [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'difficulty' => 'required|integer', 
+            'user_id' => 'required|exists:users,id',
+        ];
+
+        if ($id) {
+            $rules['user_id'] = 'sometimes|required|exists:users,id'; 
+        }
+
+        return $rules;
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class); 
+    }
 }

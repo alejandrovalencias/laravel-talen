@@ -4,56 +4,97 @@ namespace App\Http\Controllers;
 
 use App\Models\Challenge;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ChallengeController extends Controller
 {
+    /**
+     * Metodo para mostrar todos los retos
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return Challenge::all();
+        $challenges = Challenge::with('user')->get();
+        return response()->json($challenges);
     }
 
+    /**
+     * Metodo para crear nuevo reto
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'difficulty' => 'required|integer',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $validator = Validator::make($request->all(), Challenge::rules());
 
-        return Challenge::create($request->all());
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $challenge = Challenge::create($request->all());
+        return response()->json($challenge, 201);
     }
 
+    /**
+     * Metodo para mostrar especifico reto
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        return Challenge::findOrFail($id);
+        $challenge = Challenge::with('user')->find($id);
+
+        if (!$challenge) {
+            return response()->json(['error' => 'Reto no encontrado'], 404);
+        }
+
+        return response()->json($challenge);
     }
 
+    /**
+     * Metodo para actualizar
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        try {
-            $request->validate([
-                'title' => 'required|max:255',
-                'description' => 'required',
-                'difficulty' => 'required|integer',
-                'user_id' => 'required|exists:users,id',
-            ], [
-                'user_id.exists' => 'El user_id especificado no existe.',
-            ]);
+        $validator = Validator::make($request->all(), Challenge::rules($id));
 
-            $challenge = Challenge::findOrFail($id);
-            $challenge->update($request->all());
-            return $challenge;
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'No se pudo actualizar el id:' . $id, 'msg' => $e->validator->customMessages], 500);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
+
+        $challenge = Challenge::find($id);
+
+        if (!$challenge) {
+            return response()->json(['error' => 'Reto no encontrado'], 404);
+        }
+
+        $challenge->update($request->all());
+        return response()->json($challenge);
     }
 
+    /**
+     * Metodo para eliminar
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-        $challenge = Challenge::findOrFail($id);
-        $challenge->delete();
+        $challenge = Challenge::find($id);
 
-        return response()->json(null, 204);
+        if (!$challenge) {
+            return response()->json(['error' => 'Reto no encontrado'], 404);
+        }
+
+        $challenge->delete();
+        return response()->json(['message' => 'Reto eliminado con exito']);
     }
 }
