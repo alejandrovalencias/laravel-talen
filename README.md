@@ -44,7 +44,7 @@ para consumir cada entidad solo se debe agregar a la url base cualquiera de las 
 Decargar el proyecto y correr los siguientes comandos
 
 ```bash
-  git clonehttps://github.com/alejandrovalencias/laravel-talen.git
+git clonehttps://github.com/alejandrovalencias/laravel-talen.git
   cd laravel-talen
  composer install
  php artisan serve
@@ -60,7 +60,7 @@ Decargar el proyecto y correr los siguientes comandos
 
 ## Nota
 
-- Las apis de consulta de la entidad ProgramParticipants no funcionan
+- Las apis de consulta de la entidad ProgramParticipants no funcionan solo los metodos GET, el guardar, eliminar y actualizar funcionan de forma correcta
 - También se agrega archivo de insomnia para que sea importado y cargue todos los metodos de las entiades
 
 * Insomnia es un programa para consumir Apis Rest
